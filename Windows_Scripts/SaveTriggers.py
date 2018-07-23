@@ -15,17 +15,17 @@ import collections
 import Tkinter, tkFileDialog
 
 # Set Tmin, Tmax, and Bins:
-Tmin = 0 # in seconds
-Tmax = 1440 # in seconds
+Tmin = 10 # in seconds
+Tmax = 1000 # in seconds
 Bin_Lengths = ['0-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
                '8000-11000', '11000-15000', '15000-20000'] # in miliseconds
 
-root = Tkinter.Tk()
-root.withdraw()
-data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
-data_folder = '%s/FishData' % data_folder
-# data_folder = raw_input("Input name of folder containing LoadData output: ")
-# data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+# root = Tkinter.Tk()
+# root.withdraw()
+# data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
+# data_folder = '%s/FishData' % data_folder
+data_folder = raw_input("Input name of folder containing LoadData output: ")
+data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
 
 # Define function to sort .csv files in order
 _nsre = re.compile('([0-9]+)')

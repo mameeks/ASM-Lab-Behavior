@@ -10,13 +10,13 @@ import os, shutil
 import pandas as pd
 from GetFishTrace import GetFishTrace
 import re
-import Tkinter, tkFileDialog
-
-root = Tkinter.Tk()
-root.withdraw()
-data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
-# data_folder = raw_input("Input name of folder containing LoadData output: ")
-# data_folder = '/Users/malika/Documents/MATLAB/behavior/%s' % data_folder
+# import Tkinter, tkFileDialog
+#
+# root = Tkinter.Tk()
+# root.withdraw()
+# data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
+data_folder = raw_input("Input name of folder containing LoadData output: ")
+data_folder = '/Users/malika/Documents/MATLAB/behavior/%s' % data_folder
 
 _nsre = re.compile('([0-9]+)')
 def natural_sort_key(s):

@@ -13,7 +13,7 @@ def GetFishTrace(file, num):
     """
 
     # import csv, math
-    # from math import sqrt
+    import numpy as np
     # import pandas as pd
 
     data = {}
@@ -35,8 +35,8 @@ def GetFishTrace(file, num):
     data['Sampling_Rate'] = 1/(float(Diff_Time)/file['Timestamp'].size)
 
     data['T'] = file['Timestamp']/1000
-    data['X'] = file['cXmm001']
-    data['Y'] = file['cYmm001']
+    data['X'] = X
+    data['Y'] = Y
     data['xmax'] = max(X)
     data['ymax'] = max(Y)
 
@@ -46,7 +46,7 @@ def GetFishTrace(file, num):
 
     VX = data['dX']/data['dT']
     VY = data['dY']/data['dT']
-    data['V'] = VX.pow(2)+VY.pow(2)
+    data['V'] = np.sqrt(VX.pow(2)+VY.pow(2))
 
     data['NFish'] =1
     return(data)

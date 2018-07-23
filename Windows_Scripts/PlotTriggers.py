@@ -55,7 +55,7 @@ for i in range(0, iMax):
     x_time = []
     min_time = min(time)
     x_time[:] = [x - min_time for x in time]
-    f, (fs1, fs2) = plt.subplots(2, 1, figsize=(6,8))
+    f, (fs1, fs2) = plt.subplots(2, 1, figsize=(6,7))
     fs1.plot(x_time, df[stimulus])
     fs1.set_ylim(0, 1.1)
     fs1.set_title('Triggers within %s (Stimulus)' % stimulus)

@@ -129,17 +129,14 @@ plt.savefig(name_file)
 
 ctrl = pd.DataFrame(ctrlcount)
 c_stats = ctrl.describe()
-index = c_stats.index.values
-index = index.tolist()
-index.append('median')
-c_stats=c_stats.append(pd.Series(median(ctrlcount)),ignore_index=True)
 
 stim = pd.DataFrame(stimcount)
 s_stats = stim.describe()
-s_stats = s_stats.append(pd.Series(median(stimcount)),ignore_index=True)
 
 stats = pd.concat([c_stats, s_stats], axis=1)
+index = ['Total triggers', 'Mean trigger duration (ms)', 'Std of duration', 'Min duration',
+         'Lower quartile', 'Median', 'Upper quartile', 'Max duration']
 stats['index'] = index
 stats=stats.set_index('index')
 
-stats.to_csv(save_folder + '/Descriptive.csv', float_format= '%.12f', index=True, header=['control','stimulus'])
+stats.to_csv(save_folder + '/Descriptive.csv', float_format= '%.2f', index=True, header=['control','stimulus'])
