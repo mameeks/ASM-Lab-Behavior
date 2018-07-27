@@ -12,14 +12,16 @@ import numpy as np
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
-from numpy import median
+from scipy.stats.kde import gaussian_kde
+from numpy import linspace
 # import Tkinter, tkFileDialog
 #
 # root = Tkinter.Tk()
 # root.withdraw()
 # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
 # data_folder = '%s/FishData' % data_folder
-data_folder = raw_input("Input name of folder containing LoadData output: ")
+# data_folder = raw_input("Input name of folder containing LoadData output: ")
+data_folder = 'Nacre WT_7day_1per_chronic_alcohol_exp'
 data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
 save_folder=os.path.dirname(data_folder)
 
@@ -53,25 +55,8 @@ def binstore(File, trigger, num_triggers):
 # Save data in folder below data_folder
 save_folder=os.path.dirname(data_folder)
 
-# Time bins in ms:
-Bin_Lengths = ['0-1000', '1000-2000', '2000-3000', '3000-5000', '5000-8000','8000-11000', '11000-15000', '15000-20000']
 Tmin = 10 # in seconds
 Tmax = 1000 # in seconds
-
-Start = []
-End = []
-# Save upper and lower limits of each bin to lists Start and End
-for i, Bin in enumerate(Bin_Lengths):
-    indices = re.split('-', Bin)
-    Start.append(int(indices[0]))
-    End.append(int(indices[1]))
-
-# Add one more bin for data after last bin
-Start.append(End[-1])
-Bin_Lengths.append('> than ' + str(End[-1]))
-
-if Tmax < End[-1]/1000:
-    ValueError('Bin Lengths requested are greater than TMax')
 
 # Load Data
 # Get all csv files in the specified folder
@@ -102,8 +87,8 @@ for i in range(1, len(csvfiles)+1):
     if Tmax1 > len(File[cnames[0]]):
         ValueError('Time bin specified is greater than recording time')
 
-    Bins_for_sorting = Start[:]
-    Bins_for_sorting.append(Tmax*1000)
+    # Bins_for_sorting = Start[:]
+    # Bins_for_sorting.append(Tmax*1000)
 
     # Get time taken for different triggers
 
@@ -118,14 +103,34 @@ for i in range(1, len(csvfiles)+1):
             ctrlcount.extend(binstore(File, trigger, ctrl_triggers))
         count += 1
 
-plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+# plt.hist(ctrlcount, alpha=0.5, label='control', bins = int(range/100))
+# plt.hist(stimcount, alpha=0.5, label='stimulus', bins = int(range/100))
+# plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
+# plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+
+# plot control
+kde1 = gaussian_kde(ctrlcount)
+# these are the values over wich your kernel will be evaluated
+dist_space1 = linspace(min(ctrlcount), max(ctrlcount), 200)
+# plot the results
+line1, = plt.plot(dist_space1, kde1(dist_space1))
+# plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
+
+# plot stimulus
+kde2 = gaussian_kde(stimcount)
+# these are the values over wich your kernel will be evaluated
+dist_space2 = linspace(min(stimcount), max(stimcount), 200)
+# plot the results
+line2, = plt.plot(dist_space2, kde2(dist_space2))
+# plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+
 plt.title('Frequency of Trigger Duration')
 plt.xlabel('Duration (ms)')
 plt.ylabel('Frequency')
-plt.legend(loc='upper right')
+plt.legend((line1, line2), ('control', 'stimulus'))
 name_file = save_folder+'/Trigger_Histogram.jpg'
 plt.savefig(name_file)
+plt.show()
 
 ctrl = pd.DataFrame(ctrlcount)
 c_stats = ctrl.describe()
