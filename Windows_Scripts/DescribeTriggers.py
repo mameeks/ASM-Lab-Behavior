@@ -14,14 +14,14 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.stats.kde import gaussian_kde
 from numpy import linspace
-# import Tkinter, tkFileDialog
-#
+import Tkinter, tkFileDialog
+
 # root = Tkinter.Tk()
 # root.withdraw()
 # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
 # data_folder = '%s/FishData' % data_folder
-# data_folder = raw_input("Input name of folder containing LoadData output: ")
 data_folder = 'Nacre WT_7day_1per_chronic_alcohol_exp'
+# data_folder = raw_input("Input name of folder containing LoadData output: ")
 data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
 save_folder=os.path.dirname(data_folder)
 
@@ -103,31 +103,23 @@ for i in range(1, len(csvfiles)+1):
             ctrlcount.extend(binstore(File, trigger, ctrl_triggers))
         count += 1
 
-# plt.hist(ctrlcount, alpha=0.5, label='control', bins = int(range/100))
-# plt.hist(stimcount, alpha=0.5, label='stimulus', bins = int(range/100))
-# plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-# plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+# histogram
+plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
+plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+plt.legend()
 
-# plot control
-kde1 = gaussian_kde(ctrlcount)
-# these are the values over wich your kernel will be evaluated
-dist_space1 = linspace(min(ctrlcount), max(ctrlcount), 200)
-# plot the results
-line1, = plt.plot(dist_space1, kde1(dist_space1))
-# plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-
-# plot stimulus
-kde2 = gaussian_kde(stimcount)
-# these are the values over wich your kernel will be evaluated
-dist_space2 = linspace(min(stimcount), max(stimcount), 200)
-# plot the results
-line2, = plt.plot(dist_space2, kde2(dist_space2))
-# plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+# probability density curve
+# kde1 = gaussian_kde(ctrlcount)
+# dist_space1 = linspace(min(ctrlcount), max(ctrlcount), 200)
+# line1, = plt.plot(dist_space1, kde1(dist_space1))
+# kde2 = gaussian_kde(stimcount)
+# dist_space2 = linspace(min(stimcount), max(stimcount), 200)
+# line2, = plt.plot(dist_space2, kde2(dist_space2))
+# plt.legend((line1, line2), ('control', 'stimulus'))
 
 plt.title('Frequency of Trigger Duration')
 plt.xlabel('Duration (ms)')
 plt.ylabel('Frequency')
-plt.legend((line1, line2), ('control', 'stimulus'))
 name_file = save_folder+'/Trigger_Histogram.jpg'
 plt.savefig(name_file)
 plt.show()

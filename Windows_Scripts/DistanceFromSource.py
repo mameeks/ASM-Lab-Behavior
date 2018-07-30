@@ -74,5 +74,4 @@ def DistanceFromSource(TMin, TMax):
 
     # save file
     filename = raw_input('Enter file name for saving:')
-    header = list(data)
     data.to_csv('%s/%s.csv' % (save_folder, filename), float_format= '%.12f',index=False)

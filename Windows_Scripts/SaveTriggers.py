@@ -20,12 +20,6 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
     import collections
     import Tkinter, tkFileDialog
 
-    # Set Tmin, Tmax, and Bins:
-    # Tmin = 10 # in seconds
-    # Tmax = 1000 # in seconds
-    # Bin_Lengths = ['0-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
-    #                '8000-11000', '11000-15000', '15000-20000'] # in miliseconds
-
     # root = Tkinter.Tk()
     # root.withdraw()
     # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
@@ -143,7 +137,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
 
     df = pd.concat([df1, df2], axis=1)
     colnames = list(df)
-    filename = raw_input('Enter file name: ')
-    #
-    # # export as csv
+    filename = raw_input('Enter file name for saving: ')
+
+    # export as csv
     df.to_csv('%s/%s.csv' % (save_folder, filename), float_format= '%.12f', index=False, header=colnames)

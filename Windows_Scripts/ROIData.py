@@ -1,4 +1,4 @@
-def ROIData(Vertices, TMin, TMax):
+def ROIData(Coordinates, TMin, TMax):
 #    What script does
 #
 #     Sentence about what it does
@@ -38,7 +38,6 @@ def ROIData(Vertices, TMin, TMax):
 
     for i in range(1, len(csvfiles)+1):
         print('Fish..'+str(i))
-        data_in, data_out = [], []
         # Extract time spent
         File = pd.read_csv(csvfiles[i-1])
         cnames = File.columns.tolist()
@@ -47,7 +46,7 @@ def ROIData(Vertices, TMin, TMax):
 
         TMin1 = round(File['Sampling_Rate'][0]*TMin)
         TMax1 = round(File['Sampling_Rate'][0]*TMax)
-        data_in, data_out = InROI(File, Vertices, TMin1, TMax1)
+        data_in, data_out = InROI(File, Coordinates, TMin1, TMax1)
 
         TIn = 0
         TOut = 0

@@ -1,12 +1,12 @@
-def InROI(file, Vertices, TMin, TMax):
+def InROI(file, Coordinates, TMin, TMax):
     from matplotlib import path
     import numpy as np
     from scipy import spatial as sp
 
-    K = sp.ConvexHull(Vertices).vertices
+    K = sp.ConvexHull(Coordinates).vertices
     K = np.append(K, K[0])
-    XVert = Vertices[K,0]
-    YVert = Vertices[K,1]
+    XVert = Coordinates[K,0]
+    YVert = Coordinates[K,1]
     XY = np.stack((XVert, YVert), axis=1)
 
     data_in = [0]*len(file['T'])
