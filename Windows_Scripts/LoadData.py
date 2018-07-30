@@ -45,7 +45,7 @@ def LoadData():
     for i in range(0, iMax):
         # read csv file
         File=pd.read_csv(csvfiles[i])
-        filename = re.search('/(LOG.*?)/', csvfiles[i])
+        filename = re.search('\\\\(LOG.*?)\\\\', csvfiles[i])
         Fish1 = GetFishTrace(File, 1)
         F1 = str(2*count-1)
         Fish2 = GetFishTrace(File, 2)
