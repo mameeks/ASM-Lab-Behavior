@@ -103,26 +103,31 @@ for i in range(1, len(csvfiles)+1):
             ctrlcount.extend(binstore(File, trigger, ctrl_triggers))
         count += 1
 
-# histogram
-plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
-plt.legend()
+    # histogram
+    plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
+    plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+    plt.legend()
+    plt.title('Frequency of Trigger Duration')
+    plt.xlabel('Duration (ms)')
+    plt.ylabel('Frequency')
+    name_file = save_folder+'/Trigger_Histogram.jpg'
+    plt.savefig(name_file)
+    plt.show()
 
-# probability density curve
-# kde1 = gaussian_kde(ctrlcount)
-# dist_space1 = linspace(min(ctrlcount), max(ctrlcount), 200)
-# line1, = plt.plot(dist_space1, kde1(dist_space1))
-# kde2 = gaussian_kde(stimcount)
-# dist_space2 = linspace(min(stimcount), max(stimcount), 200)
-# line2, = plt.plot(dist_space2, kde2(dist_space2))
-# plt.legend((line1, line2), ('control', 'stimulus'))
-
-plt.title('Frequency of Trigger Duration')
-plt.xlabel('Duration (ms)')
-plt.ylabel('Frequency')
-name_file = save_folder+'/Trigger_Histogram.jpg'
-plt.savefig(name_file)
-plt.show()
+    # probability density curve
+    kde1 = gaussian_kde(ctrlcount)
+    dist_space1 = linspace(min(ctrlcount), max(ctrlcount), 200)
+    line1, = plt.plot(dist_space1, kde1(dist_space1))
+    kde2 = gaussian_kde(stimcount)
+    dist_space2 = linspace(min(stimcount), max(stimcount), 200)
+    line2, = plt.plot(dist_space2, kde2(dist_space2))
+    plt.legend((line1, line2), ('control', 'stimulus'))
+    plt.title('Frequency of Trigger Duration')
+    plt.xlabel('Duration (ms)')
+    plt.ylabel('Frequency')
+    name_file = save_folder+'/Trigger_Curve.jpg'
+    plt.savefig(name_file)
+    plt.show()
 
 ctrl = pd.DataFrame(ctrlcount)
 c_stats = ctrl.describe()
