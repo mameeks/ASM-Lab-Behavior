@@ -20,7 +20,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
     import collections
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
@@ -30,7 +30,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
 
     # Define function to sort bins
     def binstore(File, trigger, df, i, ROI):
-
+        trigger_time = len(np.nonzero(trigger)[0]) * 1/(File['Sampling_Rate'][1])
         # Save only consecutive 1s in trigger
         trigger = trigger.tolist()
         trigger = ''.join([str(x) for x in trigger])
@@ -52,7 +52,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
             result = np.delete(result, 0)
             result = result.astype('S15')
             result = np.insert(result, 0, "Fish %s %s" % (i, ROI))
-            result = np.append(result, len(np.nonzero(trigger)[0]) * 1/(File['Sampling_Rate'][1]))
+            result = np.append(result, trigger_time)
             df.loc[len(df)] = result
         return result
 

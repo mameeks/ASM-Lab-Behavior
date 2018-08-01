@@ -100,13 +100,14 @@ def DescribeTriggers():
             count += 1
 
     # histogram
-    plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-    plt.hist(stimcount, bins='auto', alpha=0.5, label='stimulus')
+    n, bins, patches = plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
+    plt.hist(stimcount, bins=bins, alpha=0.5, label='stimulus')
     plt.legend()
     plt.title('Frequency of Trigger Duration')
     plt.xlabel('Duration (ms)')
     plt.ylabel('Frequency')
     name_file = save_folder+'/Trigger_Histogram.jpg'
+    plt.tight_layout()
     plt.savefig(name_file)
     plt.show()
 
@@ -122,6 +123,7 @@ def DescribeTriggers():
     plt.xlabel('Duration (ms)')
     plt.ylabel('Frequency')
     name_file = save_folder+'/Trigger_Curve.jpg'
+    plt.tight_layout()
     plt.savefig(name_file)
     plt.show()
 

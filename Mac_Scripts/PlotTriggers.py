@@ -14,8 +14,10 @@ def PlotTriggers():
     import pandas as pd
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+    data_folder = '/Users/malika/Documents/IMCB/behavior/%s/FishData' % data_folder
     save_folder=os.path.dirname(data_folder)
+
+    duration = 1440
 
     if os.path.exists(save_folder+'/Figures'):
             shutil.rmtree(save_folder+'/Figures')
@@ -54,6 +56,7 @@ def PlotTriggers():
         f, (fs1, fs2) = plt.subplots(2, 1, figsize=(7,7))
         fs1.plot(x_time, df[stimulus])
         fs1.set_ylim(0, 1.1)
+        fs1.set_xlim(0, duration)
         fs1.set_title('Triggers within %s (Stimulus)' % stimulus)
         fs1.set_xlabel('Time (ms)')
         fs1.set_ylabel('Trigger on')
@@ -61,6 +64,7 @@ def PlotTriggers():
 
         fs2.plot(x_time, df[control])
         fs2.set_ylim(0, 1.1)
+        fs2.set_xlim(0, duration )
         fs2.set_title('Triggers within %s (Control)' % control)
         fs2.set_xlabel('Time (ms)')
         fs2.set_ylabel('Trigger on')
