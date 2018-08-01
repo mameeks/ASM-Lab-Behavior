@@ -20,7 +20,7 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
     import collections
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
+    data_folder = '%s/FishData' % data_folder
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
