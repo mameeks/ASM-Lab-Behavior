@@ -14,7 +14,7 @@ def PlotTriggers():
     import pandas as pd
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/IMCB/behavior/%s/FishData' % data_folder
+    data_folder = '%s/FishData' % data_folder
     save_folder=os.path.dirname(data_folder)
 
     duration = 1440
