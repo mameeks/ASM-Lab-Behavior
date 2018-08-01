@@ -14,7 +14,7 @@ def TdmsToCSV():
     import re
 
     data_folder = raw_input("Input name of folder containing .tdms files: ")
-    data_folder = '/Users/malika/Documents/IMCB/behavior/%s' % data_folder
+    data_folder = '%s' % data_folder
 
     # get list of tdms files in folder
     tdmsfiles = []
