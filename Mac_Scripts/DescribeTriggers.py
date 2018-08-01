@@ -17,6 +17,9 @@ def DescribeTriggers():
     from scipy.stats.kde import gaussian_kde
     from numpy import linspace
 
+    Tmin = 0 # in seconds
+    Tmax = 1440 # in seconds
+    
     data_folder = raw_input("Input name of folder containing LoadData output: ")
     data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
     save_folder = os.path.dirname(data_folder)
@@ -50,9 +53,6 @@ def DescribeTriggers():
 
     # Save data in folder below data_folder
     save_folder=os.path.dirname(data_folder)
-
-    Tmin = 10 # in seconds
-    Tmax = 1000 # in seconds
 
     # Load Data
     # Get all csv files in the specified folder

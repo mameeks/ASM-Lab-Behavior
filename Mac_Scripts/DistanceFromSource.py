@@ -8,7 +8,7 @@ def DistanceFromSource(TMin, TMax):
     import re
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
     save_folder = os.path.dirname(data_folder)
 
     # Get distance for probability distribution
@@ -53,6 +53,7 @@ def DistanceFromSource(TMin, TMax):
         if csvfiles[i-1][-5] == 'R':
             X = [30 - x for x in X]
         Y = File['Y'][TMin1:TMax1]
+        Y = [75 - y for y in Y]
         XY = [X, Y] # make this a 3D structure
         Dist_from_source = []
 

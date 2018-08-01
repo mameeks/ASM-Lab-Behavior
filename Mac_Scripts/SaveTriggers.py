@@ -1,11 +1,11 @@
-def SaveTriggers(Tmin, Tmax, Bin_Lengths):
+def SaveTriggers(TMin, TMax, Bin_Lengths):
     #     Saves ROI trigger duration for each fish.
     #
     #     (Python equivalent of Matlab function save_triggers_in_excel)
     #
     #     Accepts:
-    #          Tmin - start time (in seconds)
-    #          Tmax - end time (in seconds)
+    #          TMin - start time (in seconds)
+    #          TMax - end time (in seconds)
     #          Bin_Lengths - bins for sorting triggers (in miliseconds)
     #
     #     Returns:
@@ -72,7 +72,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
     Start.append(End[-1])
     Bin_Lengths.append('> than ' + str(End[-1]))
 
-    if Tmax < End[-1]/1000:
+    if TMax < End[-1]/1000:
         ValueError('Bin Lengths requested are greater than TMax')
 
     # Load Data
@@ -84,8 +84,8 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
     csvfiles.sort(key=natural_sort_key)
 
     File = pd.read_csv(csvfiles[0])
-    Tmin1 = int(round(File['Sampling_Rate'][0]*Tmin))
-    Tmax1 = int(round(File['Sampling_Rate'][0]*Tmax))
+    Tmin1 = int(round(File['Sampling_Rate'][0]*TMin))
+    Tmax1 = int(round(File['Sampling_Rate'][0]*TMax))
 
     # Initialize variables before loop
     count = 1
@@ -113,7 +113,7 @@ def SaveTriggers(Tmin, Tmax, Bin_Lengths):
             ValueError('Time bin specified is greater than recording time')
 
         Bins_for_sorting = Start[:]
-        Bins_for_sorting.append(Tmax*1000)
+        Bins_for_sorting.append(TMax*1000)
 
         # Get time taken for different triggers
 

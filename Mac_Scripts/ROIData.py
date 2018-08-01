@@ -15,7 +15,7 @@ def ROIData(Coordinates, TMin, TMax):
     from InROI import InROI
 
     data_folder = raw_input("Input name of folder containing fish data: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
