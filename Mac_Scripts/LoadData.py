@@ -13,7 +13,7 @@ def LoadData():
     import re
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s' % data_folder
+    data_folder = '%s' % data_folder
 
     _nsre = re.compile('([0-9]+)')
     def natural_sort_key(s):
