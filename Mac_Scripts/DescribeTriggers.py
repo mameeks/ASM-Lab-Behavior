@@ -21,7 +21,7 @@ def DescribeTriggers():
     Tmax = 1440 # in seconds
     
     data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/IMCB/Behavior/%s/FishData' % data_folder
+    data_folder = '%s/FishData' % data_folder
     save_folder = os.path.dirname(data_folder)
 
     # Define function to sort .csv files in order
