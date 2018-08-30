@@ -59,11 +59,11 @@ def DistanceFromSource(TMin, TMax):
 
         # Find distance from source as hypotenuse
         for j in range(len(X)):
-            Dist_from_source.append(math.sqrt(XY[0][j]**2 + XY[1][j]**2))
+            Dist_from_source.append(math.sqrt(XY[0].iloc[j]**2 + XY[1][j]**2))
 
         kde = stats.gaussian_kde(Dist_from_source)
         p = kde(pts)
-        data = data.append({'Fish Number': i, 'Mean dist': np.mean(Dist_from_source), 'Median dist': np.median(Dist_from_source),
+        data = data.append({'Fish Number': int(i), 'Mean dist': np.mean(Dist_from_source), 'Median dist': np.median(Dist_from_source),
                             'SD dist': np.std(Dist_from_source), 'Max time spent dist': np.argmax(p)+1,
                             'Area 25': np.trapz(p[:19]), 'Area 50':np.trapz(p[20:38]),
                             'Area 75': np.trapz(p[39:57]), 'Area 100': np.trapz(p[58:])}, ignore_index=True)
