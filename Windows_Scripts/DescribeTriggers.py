@@ -112,6 +112,7 @@ def DescribeTriggers():
     plt.xlabel('Duration (ms)')
     plt.ylabel('Frequency')
     name_file = save_folder+'/Trigger_Histogram.jpg'
+    plt.tight_layout()
     plt.savefig(name_file)
     plt.show()
 
@@ -127,6 +128,7 @@ def DescribeTriggers():
     plt.xlabel('Duration (ms)')
     plt.ylabel('Frequency')
     name_file = save_folder+'/Trigger_Curve.jpg'
+    plt.tight_layout()
     plt.savefig(name_file)
     plt.show()
 
