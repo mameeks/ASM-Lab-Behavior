@@ -73,6 +73,8 @@ def Sparklines():
         plt.figure(figsize=(5,1), dpi=80)
         plt.fill_between(x_time, 0, stim, where=stim>0, color="black")
         plt.fill_between(x_time, 0, ctrl, where=ctrl<0, color="black")
+        plt.text(140, 0.5, 'S', fontsize=12)
+        plt.text(140, -0.6, 'C',fontsize=12)
         plt.ylim(-1.1, 1.1)
         plt.axis('off')
 
