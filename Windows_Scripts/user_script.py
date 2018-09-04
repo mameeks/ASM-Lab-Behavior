@@ -5,6 +5,9 @@ from PlotTriggers import PlotTriggers
 from SaveTriggers import SaveTriggers
 from ROIData import ROIData
 from DistanceFromSource import DistanceFromSource
+from DescribeTriggers import DescribeTriggers
+from Sparklines import Sparklines
+from Sparklines_full import Sparklines_full
 
 # TdmsToCSV()
 # LoadData()
@@ -19,4 +22,8 @@ from DistanceFromSource import DistanceFromSource
 # ROIData(Coordinates = np.array([ [0,50], [0,75], [15,50], [15,75] ]), TMin = 1260, TMax = 1440)
 # ROIData(Coordinates = np.array([ [15,50], [15,75], [30,50], [30,75] ]), TMin = 1260, TMax = 1440)
 #
-# DistanceFromSource(TMin=0,TMax=1000)
+# DistanceFromSource(TMin=5,TMax=180)
+# DistanceFromSource(TMin=0,TMax=1440)
+# Sparklines()
+# Sparklines_full()
+
