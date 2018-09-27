@@ -1,7 +1,5 @@
 def DescribeTriggers():
-
-    #     Sentence about what it does
-    #     (Python equivalent of Matlab function save_triggers_in_excel)
+    #     Python equivalent of Matlab function save_triggers_in_excel
     #
     #     Args:
     #         data_folder: definition
@@ -15,6 +13,7 @@ def DescribeTriggers():
     import pandas as pd
     from matplotlib import pyplot as plt
     from scipy.stats.kde import gaussian_kde
+    from scipy.stats import ks_2samp
     from numpy import linspace
 
     Tmin = 0 # in seconds
@@ -132,6 +131,9 @@ def DescribeTriggers():
 
     stim = pd.DataFrame(stimcount)
     s_stats = stim.describe()
+
+    ks, pval = ks_2samp(ctrlcount, stimcount)
+    print("K-S two-sample test: D = %06.3f, p = %06.3f" % (ks, pval))
 
     stats = pd.concat([c_stats, s_stats], axis=1)
     index = ['Total triggers', 'Mean trigger duration (ms)', 'Std of duration', 'Min duration',
