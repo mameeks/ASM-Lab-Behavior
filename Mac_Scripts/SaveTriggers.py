@@ -50,9 +50,11 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
             result = np.digitize(length_num_consec_ms, Bins_for_sorting)
             result = np.bincount(result, minlength=len(Bin_Lengths)+1)
             result = np.delete(result, 0)
+            num_triggers = sum(result)
             result = result.astype('S15')
             result = np.insert(result, 0, "Fish %s %s" % (i, ROI))
             result = np.append(result, trigger_time)
+            result = np.append(result, num_triggers)
             df.loc[len(df)] = result
         return result
 
@@ -97,6 +99,7 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
     ctrllab = []
     columns1 = Bin_Lengths[:]
     columns1.append('Total trigger time (s)')
+    columns1.append('Total trigger count')
     columns2 = columns1[:]
     columns1.insert(0, 'Fish ID (Stimulus)')
     columns2.insert(0, 'Fish ID (Control)')
