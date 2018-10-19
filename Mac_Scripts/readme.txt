@@ -8,3 +8,4 @@ pip install matplotlib
 - numpy
 - pandas
 - scipy
+- pillow
