@@ -12,7 +12,7 @@ from Sparklines_full import Sparklines_full
 # TdmsToCSV()
 # LoadData()
 # PlotTriggers()
-# SaveTriggers(Tmin=0, Tmax=1000, Bin_Lengths=['0-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
+# SaveTriggers(TMin=0, TMax=1000, Bin_Lengths=['0-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
 #                    '8000-11000', '11000-15000', '15000-20000'])
 #
 # DescribeTriggers()
