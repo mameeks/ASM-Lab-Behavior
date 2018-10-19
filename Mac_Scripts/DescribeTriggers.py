@@ -108,7 +108,7 @@ def DescribeTriggers():
     name_file = save_folder+'/Trigger_Histogram.jpg'
     plt.tight_layout()
     plt.savefig(name_file)
-    plt.show()
+    # plt.show()
 
     # probability density curve
     kde1 = gaussian_kde(ctrlcount)
@@ -124,7 +124,7 @@ def DescribeTriggers():
     name_file = save_folder+'/Trigger_Curve.jpg'
     plt.tight_layout()
     plt.savefig(name_file)
-    plt.show()
+    # plt.show()
 
     ctrl = pd.DataFrame(ctrlcount)
     c_stats = ctrl.describe()
