@@ -19,8 +19,8 @@ def ROIData(Coordinates, TMin, TMax):
     # root.withdraw()
     # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
     # data_folder = '%s/FishData' % data_folder
-    data_folder = raw_input("Input name of folder containing fish data: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
+    data_folder = raw_input("Input name of folder containing LoadData output: ")
+    data_folder = '%s/FishData' % data_folder
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
