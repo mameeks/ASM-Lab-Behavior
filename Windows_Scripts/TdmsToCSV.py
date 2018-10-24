@@ -18,7 +18,6 @@ def TdmsToCSV():
     # root.withdraw()
     # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing .tdms files:')
     data_folder = raw_input("Input name of folder containing .tdms files: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s' % data_folder
 
     # get list of tdms files in folder
     tdmsfiles = []
