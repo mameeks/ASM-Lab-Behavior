@@ -21,10 +21,9 @@ def DescribeTriggers():
     # root.withdraw()
     # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
     # data_folder = '%s/FishData' % data_folder
-    data_folder = 'Nacre WT_7day_1per_chronic_alcohol_exp'
-    # data_folder = raw_input("Input name of folder containing LoadData output: ")
-    data_folder = '/Users/malika/Documents/MATLAB/behavior/%s/FishData' % data_folder
-    save_folder=os.path.dirname(data_folder)
+    data_folder = raw_input("Input name of folder containing LoadData output: ")
+    data_folder = '%s/FishData' % data_folder
+    save_folder = os.path.dirname(data_folder)
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
