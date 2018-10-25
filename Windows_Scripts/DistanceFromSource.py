@@ -63,7 +63,7 @@ def DistanceFromSource(TMin, TMax):
 
         # Find distance from source as hypotenuse
         for j in range(len(X)):
-            Dist_from_source.append(math.sqrt(XY[0].iloc[j]**2 + XY[1][j]**2))
+            Dist_from_source.append(math.sqrt(XY[0][j]**2 + XY[1][j]**2))
 
         kde = stats.gaussian_kde(Dist_from_source)
         p = kde(pts)
