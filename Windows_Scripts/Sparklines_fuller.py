@@ -25,9 +25,9 @@ def Sparklines_fuller():
     Bin_Lengths = ['0-1', '1-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
                        '8000-11000', '11000-15000', '15000-20000'] # in miliseconds
 
-    if os.path.exists(save_folder+'/SparkFigures'):
-            shutil.rmtree(save_folder+'/SparkFigures')
-    os.makedirs(save_folder+'/SparkFigures')
+    if os.path.exists(save_folder+'/SparkFigures_Fuller'):
+            shutil.rmtree(save_folder+'/SparkFigures_Fuller')
+    os.makedirs(save_folder+'/SparkFigures_Fuller')
 
     _nsre = re.compile('([0-9]+)')
     def natural_sort_key(s):
@@ -52,19 +52,20 @@ def Sparklines_fuller():
         TMax1 = int(round(df['Sampling_Rate'][0]*TMax))
         Seconds = int(round(df['Sampling_Rate'][0]*cutoff))
 
+        # initialize x variable x_time
         time = df['T']
         x_time = []
         min_time = min(time)
         x_time[:] = [x - min_time for x in time]
 
         if csvfiles[i][-5] == 'L':
-            stimulus = cnames[2]
-            control = cnames[3]
+            stimulus = df[cnames[2]]
+            control = df[cnames[3]]
             stimcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
             ctrlcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
         else:
-            stimulus = cnames[3]
-            control = cnames[2]
+            stimulus = df[cnames[3]]
+            control = df[cnames[2]]
             stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
             ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
@@ -92,6 +93,7 @@ def Sparklines_fuller():
 
         stim = np.append(stim, stim_post)
         ctrl = np.append(ctrl, ctrl_post)
+        ctrl = np.negative(ctrl)
 
         if stim[-1]!=0 or ctrl[-1]!=0:
            stim=np.append(stim, 0)
@@ -108,6 +110,7 @@ def Sparklines_fuller():
         ctrl_gray = [x and y for x,y in zip(ctrl_colors,ctrl_greater)]
         stim_black = [y and not x for x,y in zip(stim_colors, stim_greater)]
         ctrl_black = [y and not x for x,y in zip(ctrl_colors, ctrl_greater)]
+
 
         # plot triggers
         fill1 = copy(pre)
@@ -126,7 +129,7 @@ def Sparklines_fuller():
         plt.axis('off')
 
         # save figure
-        filename = save_folder+'/SparkFigures_Full/Sparklines_Fish'+str(i+1)+'.jpg'
+        filename = save_folder+'/SparkFigures_Fuller/Sparklines_Fish'+str(i+1)+'.jpg'
         plt.savefig(filename)
 
 def InROI(file, Coordinates, TMin, TMax):
