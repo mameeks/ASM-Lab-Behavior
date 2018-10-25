@@ -23,9 +23,9 @@ def Sparklines_full():
     Bin_Lengths = ['0-1', '1-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
                        '8000-11000', '11000-15000', '15000-20000'] # in miliseconds
 
-    if os.path.exists(save_folder+'/SparkFigures'):
-            shutil.rmtree(save_folder+'/SparkFigures')
-    os.makedirs(save_folder+'/SparkFigures')
+    if os.path.exists(save_folder+'/SparkFigures_Full'):
+            shutil.rmtree(save_folder+'/SparkFigures_Full')
+    os.makedirs(save_folder+'/SparkFigures_Full')
 
     _nsre = re.compile('([0-9]+)')
     def natural_sort_key(s):
@@ -49,19 +49,20 @@ def Sparklines_full():
         TMin1 = int(round(df['Sampling_Rate'][0]*TMin))
         TMax1 = int(round(df['Sampling_Rate'][0]*TMax))
 
+        # initialize x variable x_time
         time = df['T']
         x_time = []
         min_time = min(time)
         x_time[:] = [x - min_time for x in time]
 
         if csvfiles[i][-5] == 'L':
-            stimulus = cnames[2]
-            control = cnames[3]
+            stimulus = df[cnames[2]]
+            control = df[cnames[3]]
             stimcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
             ctrlcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
         else:
-            stimulus = cnames[3]
-            control = cnames[2]
+            stimulus = df[cnames[3]]
+            control = df[cnames[2]]
             stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
             ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
@@ -70,7 +71,7 @@ def Sparklines_full():
         stim = np.asarray(stimulus.tolist())
         ctrl = np.asarray([ -x for x in control])
 
-        Min = 0
+        TMin = 0
         TMax = copy(pre)
         MinPre = round(df['Sampling_Rate'][0]*TMin)
         MaxPre = round(df['Sampling_Rate'][0]*TMax)
