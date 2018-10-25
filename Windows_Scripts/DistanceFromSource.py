@@ -58,6 +58,7 @@ def DistanceFromSource(TMin, TMax):
         if csvfiles[i-1][-5] == 'R':
             X = [30 - x for x in X]
         Y = File['Y'][TMin1:TMax1]
+        Y = [75 - y for y in Y]
         XY = [X, Y] # make this a 3D structure
         Dist_from_source = []
 
@@ -67,7 +68,7 @@ def DistanceFromSource(TMin, TMax):
 
         kde = stats.gaussian_kde(Dist_from_source)
         p = kde(pts)
-        data = data.append({'Fish Number': i, 'Mean dist': np.mean(Dist_from_source), 'Median dist': np.median(Dist_from_source),
+        data = data.append({'Fish Number': int(i), 'Mean dist': np.mean(Dist_from_source), 'Median dist': np.median(Dist_from_source),
                             'SD dist': np.std(Dist_from_source), 'Max time spent dist': np.argmax(p)+1,
                             'Area 25': np.trapz(p[:19]), 'Area 50':np.trapz(p[20:38]),
                             'Area 75': np.trapz(p[39:57]), 'Area 100': np.trapz(p[58:])}, ignore_index=True)
