@@ -27,4 +27,4 @@ from Sparklines_full import Sparklines_full
 # DistanceFromSource(TMin=5,TMax=180)
 # DistanceFromSource(TMin=0,TMax=1440)
 # Sparklines()
-# Sparklines_full()
+# Sparklines_fuller()
