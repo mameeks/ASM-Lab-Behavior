@@ -50,6 +50,7 @@ def DistanceFromSource(TMin, TMax):
         TMax1 = int(round(File['Sampling_Rate'][0]*TMax))
 
         X = File['X'][TMin1:TMax1]
+        X = X.tolist()
         if csvfiles[i-1][-5] == 'R':
             X = [30 - x for x in X]
         Y = File['Y'][TMin1:TMax1]
