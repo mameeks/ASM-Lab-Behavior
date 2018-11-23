@@ -62,9 +62,9 @@ def Sparklines():
         ctrl = np.asarray([ -x for x in df[control]])
 
         if stim[-1]!=0:
-           stim=stim.append(0)
+           stim=numpy.append(stim, 0)
         if ctrl[-1]!=0:
-            ctrl=ctrl.append(0)
+            ctrl=numpy.append(ctrl, 0)
 
         # plot triggers
         x_time = []
