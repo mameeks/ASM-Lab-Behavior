@@ -1,4 +1,4 @@
-def Sparklines_full():
+def Sparklines_full_mod():
     import os
     import shutil
     import re
@@ -11,14 +11,11 @@ def Sparklines_full():
     pre = 180 # pre-stimulus duration (s)
     post = 180 # post-stimulus duration (s)
     cutoff = 1.5 # minimum cutoff for gray color (s)
-    line_color = "gray" # color for lines exceeding cutoff
+    line_color = "black" # color for lines exceeding cutoff
 
     data_folder = raw_input("Input name of folder containing LoadData output: ")
     data_folder = '%s/FishData' % data_folder
     save_folder=os.path.dirname(data_folder)
-
-    Bin_Lengths = ['0-1', '1-1000', '1000-2000', '2000-3000', '3000-5000','5000-8000',
-                       '8000-11000', '11000-15000', '15000-20000'] # in miliseconds
 
     if os.path.exists(save_folder+'/SparkFigures_Fuller'):
             shutil.rmtree(save_folder+'/SparkFigures_Fuller')
@@ -41,8 +38,8 @@ def Sparklines_full():
         df=pd.read_csv(csvfiles[i])
         cnames = df.columns.tolist()
 
-        TMin = copy(pre)
-        TMax = duration - post
+        TMin = 0
+        TMax = duration
         TMin1 = int(round(df['Sampling_Rate'][0]*TMin))
         TMax1 = int(round(df['Sampling_Rate'][0]*TMax))
         Seconds = int(round(df['Sampling_Rate'][0]*cutoff))
@@ -54,40 +51,14 @@ def Sparklines_full():
         x_time[:] = [x - min_time for x in time]
 
         if csvfiles[i][-5] == 'L':
-            stimulus = df[cnames[2]]
-            control = df[cnames[3]]
             stimcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
             ctrlcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
         else:
-            stimulus = df[cnames[3]]
-            control = df[cnames[2]]
             stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
             ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
-        stimulus = stimulus.iloc[TMin1:TMax1]
-        control = control.iloc[TMin1:TMax1]
-        stim = np.asarray(stimulus.tolist())
-        ctrl = np.asarray(control.tolist())
-
-        TMin = 0
-        TMax = copy(pre)
-        MinPre = round(df['Sampling_Rate'][0]*TMin)
-        MaxPre = round(df['Sampling_Rate'][0]*TMax)
-        stim_pre = InROI(df, Coordinates=stimcoords, TMin=MinPre, TMax=MaxPre)
-        ctrl_pre = InROI(df, Coordinates=ctrlcoords, TMin=MinPre, TMax=MaxPre)
-
-        TMin = duration - post
-        TMax = copy(duration)
-        MinPost = round(df['Sampling_Rate'][0]*TMin)
-        MaxPost = round(df['Sampling_Rate'][0]*TMax)
-        stim_post = InROI(df, Coordinates=stimcoords, TMin=MinPost, TMax=MaxPost)
-        ctrl_post = InROI(df, Coordinates=ctrlcoords, TMin=MinPost, TMax=MaxPost)
-
-        stim = np.append(stim_pre, stim)
-        ctrl = np.append(ctrl_pre, ctrl)
-
-        stim = np.append(stim, stim_post)
-        ctrl = np.append(ctrl, ctrl_post)
+        stim = InROI(df, Coordinates=stimcoords, TMin = TMin1, TMax = TMax1)
+        ctrl = InROI(df, Coordinates=ctrlcoords, TMin = TMin1, TMax = TMax1)
         ctrl = np.negative(ctrl)
 
         if stim[-1]!=0 or ctrl[-1]!=0:
@@ -116,8 +87,8 @@ def Sparklines_full():
         plt.fill([fill2,fill3,fill3,fill2], [-1.05,-1.05,1,1], 'b', alpha=0.2)
         plt.fill_between(x_time, 0, stim, where=stim_gray, color=line_color)
         plt.fill_between(x_time, 0, ctrl, where=ctrl_gray, color=line_color)
-        plt.fill_between(x_time, 0, stim, where=stim_black, color="black")
-        plt.fill_between(x_time, 0, ctrl, where=ctrl_black, color="black")
+        plt.fill_between(x_time, 0, stim, where=stim_black, color="gray")
+        plt.fill_between(x_time, 0, ctrl, where=ctrl_black, color="gray")
         plt.text(-100, 0.5, 'S', fontsize=12)
         plt.text(-100, -0.6, 'C',fontsize=12)
         plt.ylim(-1.1, 1.1)
