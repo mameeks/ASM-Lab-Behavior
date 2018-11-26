@@ -6,7 +6,6 @@ from SaveTriggers import SaveTriggers
 from ROIData import ROIData
 from DistanceFromSource import DistanceFromSource
 from DescribeTriggers import DescribeTriggers
-from Sparklines import Sparklines
 from Sparklines_full import Sparklines_full
 
 # TdmsToCSV()
@@ -26,5 +25,4 @@ from Sparklines_full import Sparklines_full
 #
 # DistanceFromSource(TMin=5,TMax=180)
 # DistanceFromSource(TMin=0,TMax=1440)
-# Sparklines()
-# Sparklines_fuller()
+# Sparklines_full()
