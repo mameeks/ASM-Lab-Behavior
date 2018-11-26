@@ -1,4 +1,4 @@
-def Sparklines_fuller():
+def Sparklines_full():
     import os
     import shutil
     import re
