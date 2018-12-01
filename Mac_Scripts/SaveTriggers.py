@@ -38,24 +38,21 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
         num_consec = list(filter(None, num_consec))
 
         if not num_consec:
-            result = [0] * len(Start)
+            result = np.zeros(len(Start))
         else:
-            # length_num_consec = []
             length_num_consec_ms = []
             for k, num in enumerate(num_consec):
-                # length_num_consec.append(len(num))
                 length_num_consec_ms.append(len(num)*(1/File['Sampling_Rate'][1])*1000)
-
-            # Sort into bins
-            result = np.digitize(length_num_consec_ms, Bins_for_sorting)
-            result = np.bincount(result, minlength=len(Bin_Lengths)+1)
-            result = np.delete(result, 0)
-            num_triggers = sum(result)
-            result = result.astype('S15')
-            result = np.insert(result, 0, "Fish %s %s" % (i, ROI))
-            result = np.append(result, trigger_time)
-            result = np.append(result, num_triggers)
-            df.loc[len(df)] = result
+                result = np.digitize(length_num_consec_ms, Bins_for_sorting)
+                result = np.bincount(result, minlength=len(Bin_Lengths)+1)
+                result = np.delete(result, 0)
+        # Sort into bins
+        num_triggers = sum(result)
+        result = result.astype('S15')
+        result = np.insert(result, 0, "Fish %s %s" % (i, ROI))
+        result = np.append(result, trigger_time)
+        result = np.append(result, num_triggers)
+        df.loc[len(df)] = result
         return result
 
 
@@ -86,17 +83,12 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
     csvfiles.sort(key=natural_sort_key)
 
     File = pd.read_csv(csvfiles[0])
-    Tmin1 = int(round(File['Sampling_Rate'][0]*TMin))
-    Tmax1 = int(round(File['Sampling_Rate'][0]*TMax))
+    TMin1 = int(round(File['Sampling_Rate'][0]*TMin))
+    TMax1 = int(round(File['Sampling_Rate'][0]*TMax))
 
-    # Initialize variables before loop
-    count = 1
-    stim_triggers = []
-    ctrl_triggers = []
+    # Initialize dataframes
     stimbins = {}
     ctrlbins = {}
-    stimlab = []
-    ctrllab = []
     columns1 = Bin_Lengths[:]
     columns1.append('Total trigger time (s)')
     columns1.append('Total trigger count')
@@ -112,26 +104,28 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
         File = pd.read_csv(csvfiles[i-1])
         cnames = File.columns.tolist()
 
-        if Tmax1 > len(File[cnames[0]]):
+        if TMax1 > len(File[cnames[0]]):
             ValueError('Time bin specified is greater than recording time')
 
         Bins_for_sorting = Start[:]
         Bins_for_sorting.append(TMax*1000)
 
-        # Get time taken for different triggers
+        if csvfiles[i-1][-5] == 'L':
+            stimcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
+            ctrlcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
+        else:
+            stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
+            ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
-        for k, j in enumerate(cnames[2:4]):
-            ROI = j
-            trigger = File[ROI].iloc[Tmin1:Tmax1]
+        stim = InROI(File, Coordinates=stimcoords, TMin = TMin1, TMax = TMax1)
+        ctrl = InROI(File, Coordinates=ctrlcoords, TMin = TMin1, TMax = TMax1)
 
-            # Pass to helper function
-            if csvfiles[i-1][-5] == 'L' and k == 0 or csvfiles[i-1][-5] == 'R' and k == 1:
-                stimbins['Fish %s' % str(i)] = binstore(File, trigger, df1, i, ROI)
-                # stimlab.append('Fish %s %s' % (str(i), ROI))
-            else:
-                ctrlbins['Fish %s' % str(i)] = binstore(File, trigger, df2, i, ROI)
-                # ctrllab.append('Fish %s %s' % (str(i), ROI))
-            count += 1
+        if csvfiles[i-1][-5] == 'L':
+            stimbins['Fish %s' % str(i)] = binstore(File, stim, df1, i, cnames[2])
+            ctrlbins['Fish %s' % str(i)] = binstore(File, ctrl, df2, i, cnames[3])
+        else:
+            stimbins['Fish %s' % str(i)] = binstore(File, stim, df1, i, cnames[3])
+            ctrlbins['Fish %s' % str(i)] = binstore(File, ctrl, df2, i, cnames[2])
 
     df = pd.concat([df1, df2], axis=1)
     colnames = list(df)
@@ -139,3 +133,24 @@ def SaveTriggers(TMin, TMax, Bin_Lengths):
 
     # export as csv
     df.to_csv('%s/%s.csv' % (save_folder, filename), float_format= '%.12f', index=False, header=colnames)
+
+def InROI(file, Coordinates, TMin, TMax):
+    from matplotlib import path
+    import numpy as np
+    from scipy import spatial as sp
+    import itertools
+
+    K = sp.ConvexHull(Coordinates).vertices
+    K = np.append(K, K[0])
+    XVert = Coordinates[K,0]
+    YVert = Coordinates[K,1]
+    XY = np.stack((XVert, YVert), axis=1)
+
+    data_in = [0]*len(file['T'].iloc[int(TMin):int(TMax)])
+    X_dat = file['X'].iloc[int(TMin):int(TMax)]
+    Y_dat = file['Y'].iloc[int(TMin):int(TMax)]
+    p = path.Path(XY)
+
+    for i, (x, y) in enumerate(itertools.izip(X_dat, Y_dat)):
+        data_in[i] = int(p.contains_points([(x, y)]))
+    return np.asarray(data_in)
