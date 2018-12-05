@@ -1,6 +1,6 @@
-def SaveTriggers(Tmin, Tmax, Bin_Lengths):
+def SaveTriggers(TMin, TMax, Bin_Lengths):
     #     Saves ROI trigger duration for each fish.
-    #
+    #r
     #     (Python equivalent of Matlab function save_triggers_in_excel)
     #
     #     Accepts:
