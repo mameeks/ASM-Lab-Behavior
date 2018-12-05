@@ -65,6 +65,8 @@ def Sparklines_full():
             stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
             ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
+        stim = InROI(df, Coordinates=stimcoords, TMin = TMin1, TMax = TMax1)
+        ctrl = InROI(df, Coordinates=ctrlcoords, TMin = TMin1, TMax = TMax1)
         ctrl = np.negative(ctrl)
 
         if stim[-1]!=0 or ctrl[-1]!=0:
