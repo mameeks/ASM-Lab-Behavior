@@ -15,13 +15,15 @@ def DescribeTriggers():
     from scipy.stats.kde import gaussian_kde
     from scipy.stats import ks_2samp
     from numpy import linspace
+    import shutil
 
-    Tmin = 0 # in seconds
-    Tmax = 1440 # in seconds
+    TMin = 0 # in seconds
+    TMax = 1440 # in seconds
     
     data_folder = raw_input("Input name of folder containing LoadData output: ")
     data_folder = '%s/FishData' % data_folder
     save_folder = os.path.dirname(data_folder)
+    save_folder = '%s/DescribeTriggers' % save_folder
 
     # Define function to sort .csv files in order
     _nsre = re.compile('([0-9]+)')
@@ -49,10 +51,6 @@ def DescribeTriggers():
                 length_num_consec_ms.append(len(num)*(1/File['Sampling_Rate'][1])*1000)
         return length_num_consec_ms
 
-
-    # Save data in folder below data_folder
-    save_folder=os.path.dirname(data_folder)
-
     # Load Data
     # Get all csv files in the specified folder
     csvfiles = []
@@ -61,12 +59,15 @@ def DescribeTriggers():
             csvfiles.append(os.path.join(data_folder, File))
     csvfiles.sort(key=natural_sort_key)
 
+    if os.path.exists(save_folder):
+        shutil.rmtree(save_folder)
+    os.makedirs(save_folder)
+
     File = pd.read_csv(csvfiles[0])
-    Tmin1 = int(round(File['Sampling_Rate'][0]*Tmin))
-    Tmax1 = int(round(File['Sampling_Rate'][0]*Tmax))
+    TMin1 = int(round(File['Sampling_Rate'][0]*TMin))
+    TMax1 = int(round(File['Sampling_Rate'][0]*TMax))
 
     # Initialize variables before loop
-    count = 1
     stim_triggers = []
     ctrl_triggers = []
     stimcount = []
@@ -79,28 +80,37 @@ def DescribeTriggers():
         File = pd.read_csv(csvfiles[i-1])
         cnames = File.columns.tolist()
 
-        if Tmax1 > len(File[cnames[0]]):
+        if TMax1 > len(File[cnames[0]]):
             ValueError('Time bin specified is greater than recording time')
 
-        # Bins_for_sorting = Start[:]
-        # Bins_for_sorting.append(Tmax*1000)
+        if csvfiles[i-1][-5] == 'L':
+            stimcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
+            ctrlcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
+        else:
+            stimcoords = np.array([ [15,50], [15,75], [30,50], [30,75] ])
+            ctrlcoords = np.array([ [0,50], [0,75], [15,50], [15,75] ])
 
-        # Get time taken for different triggers
+        stim = InROI(File, Coordinates=stimcoords, TMin = TMin1, TMax = TMax1)
+        ctrl = InROI(File, Coordinates=ctrlcoords, TMin = TMin1, TMax = TMax1)
+
+        stimcount.extend(binstore(File, stim, stim_triggers))
+        ctrlcount.extend(binstore(File, ctrl, ctrl_triggers))
+
+        # initialize
 
         for k, j in enumerate(cnames[2:4]):
             ROI = j
-            trigger = File[ROI].iloc[Tmin1:Tmax1]
+            trigger = File[ROI].iloc[TMin1:TMax1]
 
             # Pass to helper function
             if csvfiles[i-1][-5] == 'L' and k == 0 or csvfiles[i-1][-5] == 'R' and k == 1:
                 stimcount.extend(binstore(File, trigger, stim_triggers))
             else:
                 ctrlcount.extend(binstore(File, trigger, ctrl_triggers))
-            count += 1
 
     # histogram
-    n, bins, patches = plt.hist(ctrlcount, bins='auto', alpha=0.5, label='control')
-    plt.hist(stimcount, bins=bins, alpha=0.5, label='stimulus')
+    ctrl_n, bins, patches = plt.hist(ctrlcount, bins=xrange(0,25000,500), alpha=0.5, label='control')
+    stim_n, bins, patches = plt.hist(stimcount, bins=bins, alpha=0.5, label='stimulus')
     plt.legend()
     plt.title('Frequency of Trigger Duration')
     plt.xlabel('Duration (ms)')
@@ -109,6 +119,13 @@ def DescribeTriggers():
     plt.tight_layout()
     plt.savefig(name_file)
     # plt.show()
+    plt.close()
+
+    # create a new bins file
+    ranges = []
+    for i in range(0, len(bins)-1):
+        ranges.append('%s-%s' % (bins[i], bins[i+1]))
+    data = pd.DataFrame({'Bin ranges':ranges, 'Stimulus':stim_n, 'Control':ctrl_n})
 
     # probability density curve
     kde1 = gaussian_kde(ctrlcount)
@@ -142,3 +159,25 @@ def DescribeTriggers():
     stats=stats.set_index('index')
 
     stats.to_csv(save_folder + '/Descriptive.csv', float_format= '%.2f', index=True, header=['control','stimulus'])
+    data.to_csv(save_folder + '/Counts.csv', float_format= '%.0f', header = list(data), index=False)
+
+def InROI(file, Coordinates, TMin, TMax):
+    from matplotlib import path
+    import numpy as np
+    from scipy import spatial as sp
+    import itertools
+
+    K = sp.ConvexHull(Coordinates).vertices
+    K = np.append(K, K[0])
+    XVert = Coordinates[K,0]
+    YVert = Coordinates[K,1]
+    XY = np.stack((XVert, YVert), axis=1)
+
+    data_in = [0]*len(file['T'].iloc[int(TMin):int(TMax)])
+    X_dat = file['X'].iloc[int(TMin):int(TMax)]
+    Y_dat = file['Y'].iloc[int(TMin):int(TMax)]
+    p = path.Path(XY)
+
+    for i, (x, y) in enumerate(itertools.izip(X_dat, Y_dat)):
+        data_in[i] = int(p.contains_points([(x, y)]))
+    return np.asarray(data_in)
