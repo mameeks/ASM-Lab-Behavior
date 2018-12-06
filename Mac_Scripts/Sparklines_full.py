@@ -1,4 +1,4 @@
-def Sparklines_full_mod():
+def Sparklines_full():
     import os
     import shutil
     import re
