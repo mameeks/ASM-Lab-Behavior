@@ -15,6 +15,7 @@ def DescribeTriggers():
     from scipy.stats.kde import gaussian_kde
     from scipy.stats import ks_2samp
     from numpy import linspace
+    import shutil
     import Tkinter, tkFileDialog
 
     TMin = 0 # in seconds
