@@ -17,6 +17,9 @@ def DescribeTriggers():
     from numpy import linspace
     import Tkinter, tkFileDialog
 
+    TMin = 0 # in seconds
+    TMax = 1440 # in seconds
+    
     # root = Tkinter.Tk()
     # root.withdraw()
     # data_folder = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select folder containing fish data:')
